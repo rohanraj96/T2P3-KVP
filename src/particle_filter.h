@@ -42,6 +42,7 @@ public:
 	
 	// Set of current particles
 	std::vector<Particle> particles;
+	std::vector<std::vector<int> > associations;
 
 	// Constructor
 	// @param num_particles Number of particles
