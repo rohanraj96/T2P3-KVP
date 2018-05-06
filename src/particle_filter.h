@@ -30,8 +30,6 @@ class ParticleFilter {
 	// Number of particles to draw
 	int num_particles; 
 	
-	
-	
 	// Flag, if filter is initialized
 	bool is_initialized;
 	
@@ -42,7 +40,7 @@ public:
 	
 	// Set of current particles
 	std::vector<Particle> particles;
-	std::vector<std::vector<int> > associations;
+	// std::vector<int> associations;
 
 	// Constructor
 	// @param num_particles Number of particles
@@ -79,6 +77,7 @@ public:
 	 * @param predicted Vector of predicted landmark observations
 	 * @param observations Vector of landmark observations
 	 */
+
 	void dataAssociation(std::vector<LandmarkObs> predicted, std::vector<LandmarkObs>& observations);
 	
 	/**

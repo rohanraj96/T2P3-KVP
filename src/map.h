@@ -1,10 +1,3 @@
-/*
- * map.h
- *
- *  Created on: Dec 12, 2016
- *      Author: mufferm
- */
-
 #ifndef MAP_H_
 #define MAP_H_
 
@@ -24,4 +17,4 @@ public:
 
 
 
-#endif /* MAP_H_ */
+#endif
