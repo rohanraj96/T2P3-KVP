@@ -20,6 +20,7 @@
 
 using namespace std;
 
+// static default_random_engine gen;
 
 void ParticleFilter::init(double x, double y, double theta, double std[]) {
 	// TODO: Set the number of particles. Initialize all particles to first position (based on estimates of 
@@ -70,44 +71,33 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 	// double std_vel = sqrt((pow(std_pos[0],2)) + pow(std_pos[1],2)) / delta_t;
 	// double std_yaw_rate = std_pos[2] / delta_t;
 
-	normal_distribution<double> dist_x(0, std_pos[0]);
-	normal_distribution<double> dist_y(0, std_pos[1]);
-	normal_distribution<double> dist_theta(0, std_pos[2]);
+	// normal_distribution<double> dist_vel(0, std_vel);
+	// normal_distribution<double> dist_yaw(0, std_yaw_rate);
+  	normal_distribution<double> dist_x(0, std_pos[0]);
+  	normal_distribution<double> dist_y(0, std_pos[1]);
+  	normal_distribution<double> dist_theta(0, std_pos[2]);
 
-	for(int i = 0; i < num_particles; i++)
-	{
-		// normal_distribution<double> dist_vel(velocity, std_vel);
-		// normal_distribution<double> dist_yaw_rate(yaw_rate, std_yaw_rate);
-		// double velocity_sample = dist_vel(gen);
-		// double yaw_rate_sample = dist_yaw_rate(gen);
-		double x_new;
-		double y_new;
-		double theta_new;
+  	for (int i = 0; i < num_particles; i++) {
 
-		if(fabs(yaw_rate < 1e-10))
-		{
-			x_new = particles[i].x + velocity * delta_t * cos(particles[i].theta);
-			y_new = particles[i].y + velocity * delta_t * sin(particles[i].theta);
-			theta_new = particles[i].theta;
-		}
+  	// velocity += dist_vel(gen);
+  	// yaw_rate += dist_yaw(gen);
 
-		else
-		{
-			x_new = particles[i].x + velocity/yaw_rate * 
-						(sin(particles[i].theta + yaw_rate * delta_t) - 
-						sin(particles[i].theta));
-			y_new = particles[i].y + velocity/yaw_rate * 
-						(cos(particles[i].theta) - cos(particles[i].theta + 
-						yaw_rate * delta_t));
-			theta_new = particles[i].theta + yaw_rate * delta_t;
-		}
-		
-		particles[i].x = x_new + dist_x(gen);
-		particles[i].y = y_new + dist_y(gen);
-		particles[i].theta = theta_new + dist_theta(gen);
-	}
+    if (fabs(yaw_rate) < 1e-10) {  
+      particles[i].x += velocity * delta_t * cos(particles[i].theta);
+      particles[i].y += velocity * delta_t * sin(particles[i].theta);
+    } 
+    else {
+      particles[i].x += velocity / yaw_rate * (sin(particles[i].theta + yaw_rate*delta_t) - sin(particles[i].theta));
+      particles[i].y += velocity / yaw_rate * (cos(particles[i].theta) - cos(particles[i].theta + yaw_rate*delta_t));
+      particles[i].theta += yaw_rate * delta_t;
+    }
 
+    particles[i].x += dist_x(gen);
+    particles[i].y += dist_y(gen);
+    particles[i].theta += dist_theta(gen);
+  }
 }
+
 
 void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::vector<LandmarkObs>& observations) {
 	// TODO: Find the predicted measurement that is closest to each observed measurement and assign the 
